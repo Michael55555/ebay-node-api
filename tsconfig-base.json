@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "outDir": "./lib",
+    "allowJs": true,
+    "target": "ES2018",
+    "experimentalDecorators": true,
+    "rootDir": "./",
+    "types": ["node"],
+    "declaration": true,
+    "module": "CommonJS",
+    "strict": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "test"],
+  "references": [{
+    "path": "./src/"
+  }]
+}

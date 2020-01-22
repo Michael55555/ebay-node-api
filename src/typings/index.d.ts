@@ -1,0 +1,21 @@
+export type EbayOptions = {
+  name?: any;
+  operationName?: any;
+  param?: any;
+  includeSelector?: any;
+  access_token?: any;
+  globalID?: any;
+  clientID: string;
+  clientSecret: string;
+  env?: any;
+  baseUrl?: any;
+  baseSvcUrl?: any;
+  countryCode?: any;
+  body?: { grant_type: string; scope: string };
+  additionalParam?: string;
+  sortOrder?: string;
+  limit?: number;
+  pageNumber: number;
+  contentType?: string;
+  data?: string;
+};

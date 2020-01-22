@@ -1,11 +1,14 @@
 # Don't add demo folder # 
 ###################### 
-demo
+test
+coverage
 
 # OS Generate Files # 
 ###################### 
 .DS_Store
 .DS_Store?
 
+**/credentials/
+/.vscode
 /npm-debug.log
 /node_modules
