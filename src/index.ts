@@ -1,5 +1,6 @@
 import ShoppingApi from './apis/shopping';
 import TaxonomyApi from './apis/taxonomy';
+import FindingAPI  from './apis/finding';
 import {
   PROD_BASE_URL,
   SANDBOX_BASE_URL,
@@ -35,10 +36,13 @@ function applyMixins(derivedCtor: any, baseCtors: any[]) {
 class Ebay implements ShoppingApi, TaxonomyApi {
   DEFAULT_CATEGORY_TREE = 'EBAY_US';
   constructor(public options: EbayOptions) {
-    if (!options.clientID)
-      throw Error(
-        'Client ID is Missing\ncheck documentation to get Client ID http://developer.ebay.com/DevZone/account/'
-      );
+    if(!options) {
+      throw new Error('Options are missing. Please provide an object to the constructor.')
+    }
+    if (!(options.clientID && options.clientSecret)){
+      throw new Error('The "clientID" or "clientSecret" property is missing on the provided options, make sure you specify those.');
+    }
+    
     options.env = options.env || PROD_ENV;
     options.baseUrl = PROD_BASE_URL;
     options.baseSvcUrl = BASE_SVC_URL;
@@ -53,8 +57,8 @@ class Ebay implements ShoppingApi, TaxonomyApi {
   }
 }
 
-interface Ebay extends ShoppingApi, TaxonomyApi {}
+interface Ebay extends ShoppingApi, TaxonomyApi, FindingAPI {}
 
-applyMixins(Ebay, [ShoppingApi, TaxonomyApi]);
+applyMixins(Ebay, [ShoppingApi, TaxonomyApi, FindingAPI]);
 
 export default Ebay

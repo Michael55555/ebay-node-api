@@ -1,5 +1,6 @@
 import ShoppingApi from './apis/shopping';
 import TaxonomyApi from './apis/taxonomy';
+import FindingAPI from './apis/finding';
 import type { EbayOptions } from './typings';
 /**
  * Creates a eBay instance.
@@ -16,6 +17,6 @@ declare class Ebay implements ShoppingApi, TaxonomyApi {
     DEFAULT_CATEGORY_TREE: string;
     constructor(options: EbayOptions);
 }
-interface Ebay extends ShoppingApi, TaxonomyApi {
+interface Ebay extends ShoppingApi, TaxonomyApi, FindingAPI {
 }
 export default Ebay;

@@ -1,28 +1,28 @@
-import { expect, should } from 'chai';
-should();
-const nock = require('nock');
-const EBay = require('../src/index');
-const { constructAdditionalParams } = require('../src/findingApi');
+import * as nock from 'nock';
+import Ebay from '../src/index';
+import type { EbayOptions } from '../src/typings';
+import FindingAPI from '../src/apis/finding';
+
 const nockFindingApi = nock('https://svcs.ebay.com/');
 
 describe('test ebay finding Api', () => {
     describe('test findingApi methods with required params', () => {
         it('test findItemsByCategory with required params', () => {
-            let ebay = new EBay({
-                clientID: 'ClientId'
+            let ebay = new Ebay(<EbayOptions>{
+                clientID: '12345', clientSecret:'54321'
             });
             expect(() => {
-                ebay.findItemsByCategory();
-            }).to.throw('Category ID is null or invalid');
+                ebay.findItemsByCategory(undefined);
+            }).toThrow('Category ID is null or invalid');
         });
 
         it('test findCompletedItemswith required params', () => {
-            let ebay = new EBay({
-                clientID: 'ClientId'
+            let ebay = new Ebay(<EbayOptions>{
+                clientID: '12345', clientSecret:'54321'
             });
             expect(() => {
-                ebay.findCompletedItems('');
-            }).to.throw('Keyword or category ID are required.');
+                ebay.findCompletedItems(undefined);
+            }).toThrow('Keyword or category ID are required.');
         });
     });
 
@@ -36,8 +36,8 @@ describe('test ebay finding Api', () => {
                 sortOrder: 'PricePlusShippingLowest'
             };
             const emptyOptions = {};
-            expect(constructAdditionalParams(options)).to.be.equal(expectedParam);
-            expect(constructAdditionalParams(emptyOptions)).to.be.equal('');
+            expect(FindingAPI.constructAdditionalParams(options)).toEqual(expectedParam);
+            expect(FindingAPI.constructAdditionalParams(emptyOptions)).toEqual('');
         });
 
         it('test constructAdditionalParams with affiliate params', () => {
@@ -61,13 +61,13 @@ describe('test ebay finding Api', () => {
                 sortOrder: 'PricePlusShippingLowest'
             };
             const emptyOptions = {};
-            expect(constructAdditionalParams(options)).to.be.equal(
+            expect(FindingAPI.constructAdditionalParams(options)).toEqual(
                 expectedParamWithAffiliate
             );
-            expect(constructAdditionalParams(optionsWithNoAffiliate)).to.be.equal(
+            expect(FindingAPI.constructAdditionalParams(optionsWithNoAffiliate)).toEqual(
                 expectedParam
             );
-            expect(constructAdditionalParams(emptyOptions)).to.be.equal('');
+            expect(FindingAPI.constructAdditionalParams(emptyOptions)).toEqual('');
         });
 
         it('test constructAdditionalParams with additional params', () => {
@@ -90,8 +90,8 @@ describe('test ebay finding Api', () => {
                 SoldItemsOnly: true,
                 entriesPerPage: 2
             };
-            expect(constructAdditionalParams(options)).to.be.equal(expectedParam);
-            expect(constructAdditionalParams(optionsWithPagination)).to.be.equal(
+            expect(FindingAPI.constructAdditionalParams(options)).toEqual(expectedParam);
+            expect(FindingAPI.constructAdditionalParams(optionsWithPagination)).toEqual(
                 expectedPagParam
             );
         });
@@ -99,8 +99,8 @@ describe('test ebay finding Api', () => {
 
     describe('test all get apis', () => {
         it('test findItemsAdvanced', () => {
-            let ebay = new EBay({
-                clientID: 'ABCD'
+            let ebay = new Ebay(<EbayOptions>{
+                clientID: 'ABCD', clientSecret:'54321'
             });
             nockFindingApi
                 .get(
@@ -114,12 +114,10 @@ describe('test ebay finding Api', () => {
                     ExpeditedShippingType: 'OneDayShipping'
                 })
                 .then(
-                    data => {
-                        expect(data.findItemsAdvancedResponse).not.null;
+                    (data:any) => {
+                        expect(data.findItemsAdvancedResponse).not.toBeNull();
                     },
-                    error => {
-                        console.log(error);
-                    }
+                    console.log
                 );
         });
     });

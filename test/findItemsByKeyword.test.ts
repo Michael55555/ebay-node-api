@@ -1,5 +1,7 @@
-const nock = require('nock');
-const Ebay = require('../src/index');
+import type { EbayOptions } from "../src/typings";
+
+import * as nock from 'nock';
+import Ebay from '../src/index';
 
 describe('Test find items by keyword method', () => {
   beforeEach(() => {
@@ -19,11 +21,11 @@ describe('Test find items by keyword method', () => {
   });
 
   it('test input parameter in findItemsByKeyword method', () => {
-    let ebay = new Ebay({
-      clientID: 'ClientId'
+    let ebay = new Ebay(<EbayOptions>{
+      clientID: '12345', clientSecret:'54321'
     });
     expect(() => {
-      ebay.findItemsByKeywords();
+      ebay.findItemsByKeywords(undefined);
     }).toThrow('Keyword is missing, Keyword is required');
   });
 });

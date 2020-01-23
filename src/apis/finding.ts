@@ -6,7 +6,7 @@ const FIND_ITEMS_BY_CATEGORY = 'findItemsByCategory';
 const FIND_COMPLETED_ITEMS = 'findCompletedItems';
 const FIND_ITEMS_ADV = 'findItemsAdvanced';
 
-export class FindingAPI {
+export default class FindingAPI {
   constructor(public options: EbayOptions){}
   findItemsByKeywords(options:any) {
   if (!options) {
@@ -20,7 +20,7 @@ export class FindingAPI {
   if (!options.keywords) {
     this.options.name = options;
   }
-  this.options.additionalParam = this.constructAdditionalParams(options);
+  this.options.additionalParam = FindingAPI.constructAdditionalParams(options);
   const url = urlObject.buildSearchUrl(this.options);
   return getRequest(url).then(data => {
     return JSON.parse(data).findItemsByKeywordsResponse;
@@ -55,7 +55,7 @@ export class FindingAPI {
     options.keywords = encodeURIComponent(options.keywords);
   }
   this.options.operationName = FIND_COMPLETED_ITEMS;
-  this.options.additionalParam = this.constructAdditionalParams(options);
+  this.options.additionalParam = FindingAPI.constructAdditionalParams(options);
   const url = urlObject.buildSearchUrl(this.options);
   return getRequest(url).then(data => {
     return JSON.parse(data).findCompletedItemsResponse;
@@ -67,7 +67,7 @@ export class FindingAPI {
  * sale by category (using categoryId), by keywords (using keywords), or a combination of the two.
  * @param {Object} options
  */
-findItemsAdvanced(options: {keywords:string|number|boolean}) {
+findItemsAdvanced(options: {keywords:string|number|boolean, entriesPerPage:number,ExpeditedShippingType:string}) {
   if (!options)
     throw new Error(
       'INVALID_REQUEST_PARMS --> check here for input fields https://developer.ebay.com/DevZone/finding/CallRef/findItemsAdvanced.html#Input'
@@ -76,7 +76,7 @@ findItemsAdvanced(options: {keywords:string|number|boolean}) {
     options.keywords = encodeURIComponent(options.keywords);
   }
   this.options.operationName = FIND_ITEMS_ADV;
-  this.options.additionalParam = this.constructAdditionalParams(options);
+  this.options.additionalParam = FindingAPI.constructAdditionalParams(options);
   const url = urlObject.buildSearchUrl(this.options);
   return getRequest(url).then(data => {
     return JSON.parse(data).findItemsAdvancedResponse;
@@ -98,7 +98,7 @@ getVersion() {
 findItemsByProduct(options: {type: string }) {
   let type = options.type || 'ReferenceID';
   this.options.operationName = 'findItemsByProduct';
-  this.options.additionalParam = this.constructAdditionalParams(options);
+  this.options.additionalParam = FindingAPI.constructAdditionalParams(options);
   let url = urlObject.buildSearchUrl(this.options);
   url = `${url}&productId.@type=${type}`;
   return getRequest(url).then(data => {
@@ -112,12 +112,12 @@ findItemsByProduct(options: {type: string }) {
  * ```output will be keywords=iphone&itemFilter(0).name=Condition&itemFilter(0).value=3000&itemFilter(1).name=FreeShippingOnly&itemFilter(1).value=true```
  * @param {Object} options
  */
-constructAdditionalParams(options: { [x: string]: any }) {
+static constructAdditionalParams(options: { [x: string]: any }) {
   let params = '';
   let count = 0;
   for (let key in options) {
-    if (options.hasOwnProperty(key)) continue;
-    if (key === 'entriesPerPage' || key === 'pageNumber') {
+    if (!options.hasOwnProperty(key)) continue;
+    if (['entriesPerPage', 'pageNumber'].includes(key)) {
       params = `${params}paginationInput.${key}=${options[key]}&`;
     } else if (
       ['keywords', 'categoryId', 'productId', 'sortOrder'].includes(key)

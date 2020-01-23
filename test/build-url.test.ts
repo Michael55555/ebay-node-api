@@ -1,7 +1,5 @@
 import { buildSearchUrl, buildShoppingUrl } from '../src/build-url';
 import type { EbayOptions } from '../src/typings';
-import { expect } from 'chai';
-import 'mocha';
 
 describe('test building url methods', () => {
   it('test search url', () => {
@@ -16,7 +14,7 @@ describe('test building url methods', () => {
       globalID: 'EBAY-US',
       baseSvcUrl: 'svcs.ebay.com'
     };
-    expect(buildSearchUrl(<EbayOptions>options)).to.be.equal(expectedSearchUrl);
+    expect(buildSearchUrl(<EbayOptions>options)).toEqual(expectedSearchUrl);
   });
 
   it('test Shopping url without selector', () => {
@@ -29,7 +27,7 @@ describe('test building url methods', () => {
       clientID: 'testID',
       baseUrl: 'open.api.ebay.com'
     };
-    expect(buildShoppingUrl(<EbayOptions>options)).to.be.equal(
+    expect(buildShoppingUrl(<EbayOptions>options)).toEqual(
       expectedSearchUrl
     );
   });
@@ -45,7 +43,7 @@ describe('test building url methods', () => {
       includeSelector: true,
       baseUrl: 'open.api.ebay.com'
     };
-    expect(buildShoppingUrl(<EbayOptions>options)).to.be.equal(
+    expect(buildShoppingUrl(<EbayOptions>options)).toEqual(
       expectedSearchUrl
     );
   });

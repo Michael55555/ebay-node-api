@@ -1,5 +1,5 @@
 import type { EbayOptions } from '../typings';
-export declare class FindingAPI {
+export default class FindingAPI {
     options: EbayOptions;
     constructor(options: EbayOptions);
     findItemsByKeywords(options: any): Promise<any>;
@@ -20,6 +20,8 @@ export declare class FindingAPI {
      */
     findItemsAdvanced(options: {
         keywords: string | number | boolean;
+        entriesPerPage: number;
+        ExpeditedShippingType: string;
     }): Promise<any>;
     getVersion(): Promise<any>;
     /**
@@ -35,7 +37,7 @@ export declare class FindingAPI {
      * ```output will be keywords=iphone&itemFilter(0).name=Condition&itemFilter(0).value=3000&itemFilter(1).name=FreeShippingOnly&itemFilter(1).value=true```
      * @param {Object} options
      */
-    constructAdditionalParams(options: {
+    static constructAdditionalParams(options: {
         [x: string]: any;
     }): string;
 }
